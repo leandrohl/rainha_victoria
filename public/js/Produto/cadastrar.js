@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let quantidade = document.getElementById("produtoQuantidade");
 
     function gravarProduto() {
-        alert("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        
         if(validarCampos(descricao, preco, quantidade)) {
            
             var produto = {
