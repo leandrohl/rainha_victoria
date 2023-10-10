@@ -1,0 +1,37 @@
+
+<script src="/js/Produto/listar.js"></script>
+<div>
+    <h1>Produtos cadastrados</h1>
+    <a class="btn btn-primary" href="/produtos/cadastrar">Cadastrar produto</a>
+
+    <table style="margin-top:10px" class="table table-stripped">
+        <thead>
+            <th>Id</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+        </thead>
+        <tbody>
+            <% for(let i=0; i<lista.length; i++) { %>
+
+                <tr>
+                    <td><%= lista[i].proId %></td>
+                    <td><%= lista[i].proDescricao %></td>
+                    <td><%= lista[i].proPreco %></td>
+                    <td><%= lista[i].proQuantidade %></td>
+                    <td>
+                        <div>
+                            <a href="/produtos/alterar/<%= lista[i].proId %>" class="btn btn-primary">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <button data-id="<%= lista[i].proId %>" class="btn btn-danger btnExclusao">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+            <% } %>
+        </tbody>
+    </table>
+</div>

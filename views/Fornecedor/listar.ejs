@@ -1,0 +1,28 @@
+
+<div>
+    <h1>Fornecedores cadastrados</h1>
+    <a class="btn btn-primary" href="/fornecedor/cadastrar">Cadastrar fornecedores</a>
+
+    <table style="margin-top:10px" class="table table-stripped">
+        <thead>
+            <th>Cnpj</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Endereco</th>
+            <th>CEP</th>
+        </thead>
+        <tbody>
+            <% for(let i=0; i<lista.length; i++) { %>
+
+                <tr>
+                    <td><%= lista[i].fornCnpj %></td>
+                    <td><%= lista[i].fornNome %></td>
+                    <td><%= lista[i].fornEmail %></td>
+                    <td><%= lista[i].fornEndereco %></td>
+                    <td><%= lista[i].fornCep %></td>
+                </tr>
+
+            <% } %>
+        </tbody>
+    </table>
+</div>
