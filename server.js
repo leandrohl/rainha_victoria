@@ -8,7 +8,7 @@ const app = express()
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
-app.set('layout', './layout')
+app.set('layout', './layout2')
 
 
 app.use(express.static("public/"))
