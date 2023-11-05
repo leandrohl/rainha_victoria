@@ -24,21 +24,21 @@
   <!-- START: header -->
   <header role="banner" class="probootstrap-header">
     <!-- <div class="container"> -->
-    <div class="row">
-        <a href="index.html" class="probootstrap-logo visible-xs"><img src="assets/images/rainhavitoriasfundo.png" class="hires" width="2040" height="660" alt="Free Bootstrap Template by uicookies.com"></a>
+      <div class="row">
+        <a href="/" class="probootstrap-logo visible-xs"><img src="assets/images/rainhavitoriasfundo.png"  width="2040" height="660" alt="Free Bootstrap Template by uicookies.com"></a>
         
         <a href="#" class="probootstrap-burger-menu visible-xs"><i>Menu</i></a>
         <div class="mobile-menu-overlay"></div>
 
         <nav role="navigation" class="probootstrap-nav hidden-xs">
           <ul class="probootstrap-main-nav">
-            <li class="active"><a href="index.html">Home</a></li>
+            <li class="active"><a href="/">Home</a></li>
             <!--<li><a href="about.html">Sobre nós</a></li>-->
-            <li><a href="rooms.html">Quartos</a></li>
-            <li class="hidden-xs probootstrap-logo-center"><a href="index.html"><img src="assets/images/rainhavitoriasfundo.png" class="hires" width="300" height="100" alt="RAINHA VITORIA LOGO"></a></li>
-            <li><a href="reservation.html">Reservas</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.html">Contato</a></li>
+            <li><a href="/quartos">Quartos</a></li>
+            <li class="hidden-xs probootstrap-logo-center"><a href="/"><img src="assets/images/rainhavitoriasfundo.png"  width="300" height="100" alt="RAINHA VITORIA LOGO"></a></li>
+            <li><a href="/reservas">Reservas</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contato">Contato</a></li>
           </ul>
           <div class="extra-text visible-xs">
             <a href="#" class="probootstrap-burger-menu"><i>Menu</i></a>
@@ -50,12 +50,18 @@
             </ul>
           </div>
         </nav>
-        </div>
+      </div>
     <!-- </div> -->
   </header>
   <!-- END: header -->
-
-  <section class="probootstrap-slider flexslider">
+  <div style="background-color: white;" class="content-wrapper">
+    <!-- /.content -->
+    <div style="margin:20px;" class="card card-body">
+        <%- body %>
+    </div>
+    
+  </div>
+  <!-- <section class="probootstrap-slider flexslider">
     <ul class="slides">
        <li style="background-image: url(assets/images/slider_1.jpg);" class="overlay">
           <div class="container">
@@ -333,14 +339,16 @@
         <p><a href="blog.html" class="link-with-icon white">Saber mais <i class=" icon-chevron-right"></i></a></p>
       </div>
     </div>
-  </section>
+  </section> -->
+
+  <!-- Inicio: footer -->
 
   <footer role="contentinfo" class="probootstrap-footer">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
           <div class="probootstrap-footer-widget">
-            <p class="mt40"><img src="assets/images/rainhavitoriasfundo.png" class="hires" width="240" height="66" alt="Rainha vitoria"></p>
+            <p class="mt40"><img src="assets/images/rainhavitoriasfundo.png"  width="240" height="66" alt="Rainha vitoria"></p>
             <p>Nós do Rainha Victória desejamos uma boa viagem e que faça um bom uso de todas as nossas disponibilidades. Zelamos para que possa relaxar e aproveitar cada momento único.</p>
             
           </div>
