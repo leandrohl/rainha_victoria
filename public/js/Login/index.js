@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return r.json()
             }).then(function(r) {
                 if(r.status == true){
-                    window.location.href = "/";
+                    window.location.href = "/produtos";
                 }
                 else{
                     document.getElementById("msgRetorno").innerHTML = '<div class="alert alert-danger">'+ r.msg +'</div>';
