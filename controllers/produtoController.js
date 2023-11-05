@@ -6,11 +6,11 @@ class ProdutoController {
     async listarView(req, res) {
         let produto = new ProdutoModel();
         let listaProduto = await produto.listarProdutos()
-        res.render('produto/listar', {lista: listaProduto});
+        res.render('produto/listar', {lista: listaProduto, layout: 'layoutADM'});
     }
 
     cadastrarView(req, res) {
-        res.render('produto/cadastrar');
+        res.render('produto/cadastrar', { layout: 'layoutADM' });
     }
 
     async alterarView(req, res) {

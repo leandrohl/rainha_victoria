@@ -6,17 +6,15 @@ class fornecedorController{
     async listarView(req, res) {
         let fornecedor = new FornecedorModel();
         let listaFornecedor = await fornecedor.listarFornecedor()
-        res.render('fornecedor/listar', {lista: listaFornecedor});
+        res.render('fornecedor/listar', {lista: listaFornecedor, layout: 'layoutADM'});
     }
 
     cadastrarView(req, res) {
-        res.render('fornecedor/cadastrarForn');
+        res.render('fornecedor/cadastrarForn', { layout: 'layoutADM' });
     }
 
     async fornecedorView(req, res){
-       
-    res.render('fornecedor/listarForn');
-
+        res.render('fornecedor/listarForn', { layout: 'layoutADM' });
     }
 
     
