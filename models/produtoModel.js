@@ -47,17 +47,17 @@ class ProdutoModel {
     }
 
     async obterProdutoPorId(id) {
-        let sql = "select * from tb_produto where pro_id = ?";
+        let sql = "select * from tb_produto where prod_Cod = ?";
         let valores = [id];
 
         let rows = await conexao.ExecutaComando(sql, valores);
 
         if(rows.length > 0) {
             let produto = new ProdutoModel();
-            produto.proId = rows[0]["pro_id"];
-            produto.proDescricao = rows[0]["pro_descricao"];
-            produto.proPreco = rows[0]["pro_preco"];
-            produto.proQuantidade = rows[0]["pro_quant"];
+            produto.proId = rows[0]["prod_Cod"];
+            produto.proDescricao = rows[0]["prod_Desc"];
+            produto.proPreco = rows[0]["prod_Preco"];
+            produto.proQuantidade = rows[0]["prod_Quant"];
 
             return produto;
         }
@@ -68,7 +68,7 @@ class ProdutoModel {
     async salvarProduto() {
         if(this.#proId == 0){
             let sql = `insert into tb_produto
-                        (pro_descricao, pro_preco, pro_quant)
+                        (prod_Desc, prod_Preco, prod_Quant)
                         values (?, ?, ?)`;
             let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade];
 
@@ -77,8 +77,8 @@ class ProdutoModel {
             return resultado;
         }
         else{
-            let sql = `update tb_produto set pro_descricao = ?, pro_preco = ?, 
-                        pro_quant = ? where pro_id = ?`;
+            let sql = `update tb_produto set prod_Desc = ?, prod_Preco = ?, 
+                        prod_Quant = ? where prod_Cod = ?`;
             let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade, this.#proId];
 
             let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
@@ -97,8 +97,8 @@ class ProdutoModel {
         for(let i=0; i<rows.length; i++){
             let row = rows[i];
             
-            let produto = new ProdutoModel(row["pro_id"], row["pro_descricao"], 
-            row["pro_preco"], row["pro_quant"]);
+            let produto = new ProdutoModel(row["prod_Cod"], row["prod_Desc"], 
+            row["prod_Preco"], row["prod_Quant"]);
 
             lista.push(produto);
         }
@@ -108,7 +108,7 @@ class ProdutoModel {
 
     async deletarProduto(id) {
         
-        let sql = "delete from tb_produto where pro_id = ?";
+        let sql = "delete from tb_produto where prod_Cod = ?";
         let valores = [id];
 
         let result = await conexao.ExecutaComandoNonQuery(sql, valores);
