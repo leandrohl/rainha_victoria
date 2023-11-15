@@ -14,10 +14,12 @@ document.addEventListener("DOMContentLoaded", function() {
         let endereco = document.getElementById("fornecedorEndereco");
         let cep = document.getElementById("fornecedorCep");
 
+
         if(validarCampos(cnpj, nome, email, endereco, cep)) {
            
+            
             var fornecedor = {
-                id: codigo,
+                id: codigo.value,
                 nome: nome.value,
                 cnpj: cnpj.value,
                 email: email.value,
@@ -25,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 endereco: endereco.value,
                 cep: cep.value
             }
+
+            console.log(fornecedor)
 
             fetch('/fornecedor/alterar', {
                 method: 'POST',

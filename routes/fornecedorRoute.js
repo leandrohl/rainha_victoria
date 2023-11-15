@@ -17,8 +17,8 @@ class fornecedorRoute{
         this.#router.get('/cadastrar', ctrl.cadastrarView);
         this.#router.post('/cadastrar', ctrl.cadastrar);
         this.#router.get('/alterar/:id', ctrl.alterarView);
-        // this.#router.post('/alterar', ctrl.alterar);
-        // this.#router.post('/excluir', ctrl.excluir);
+        this.#router.post('/alterar', ctrl.alterar);
+        this.#router.post('/excluir', ctrl.excluir);
     }
 
 }

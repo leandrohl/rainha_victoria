@@ -27,7 +27,7 @@ class fornecedorController{
 
     async cadastrar(req, res) {
         if(req.body.nome != '' && req.body.cnpj != '' ){
-            let fornecedor = new FornecedorModel(req.body.id, req.body.cnpj, req.body.nome, req.body.email, req.body.telefone, req.body.endereco, req.body.cep);
+            let fornecedor = new FornecedorModel(0, req.body.cnpj, req.body.nome, req.body.email, req.body.telefone, req.body.endereco, req.body.cep);
             let resultado = await fornecedor.salvarFornecedor();
 
             if(resultado == true){
@@ -56,6 +56,20 @@ class fornecedorController{
         }
         else{
             res.send({ok: false, msg: "Dados inválidos"})
+        }
+    }
+
+    async excluir(req, res) {
+        if(req.body.id != ""){
+            let fornecedor = new FornecedorModel();
+            let result = await fornecedor.deletarFornecedor(req.body.id);
+            if(result == true)
+                res.send({ok: true, msg: "Fornecedor excluído!"});
+            else
+                res.send({ok: false, msg: "Erro ao excluir fornecedor!"});
+        }
+        else{
+            res.send({ok: false, msg: "Dados inválidos!"});
         }
     }
 

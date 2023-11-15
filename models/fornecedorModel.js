@@ -82,6 +82,7 @@ class FornecedorModel {
 
         if(rows.length > 0) {
             let fornecedor = new FornecedorModel();
+            fornecedor.#fornId = rows[0]["pes_codigo"];
             fornecedor.#fornNome = rows[0]["pes_nome"];
             fornecedor.fornCnpj = rows[0]["jur_cnpj"];
             fornecedor.fornEmail = rows[0]["pes_email"];   
@@ -115,21 +116,20 @@ class FornecedorModel {
     }
 
     async editarFornecedor() {
-        let sql = `insert into tb_pessoa (pes_email, pes_nome, pes_telefone, pes_endereco, pes_cep)
-        VALUES (? ,?, ?, ?, ?)`;
+        let sql = `update tb_pessoa set pes_email = ?, pes_nome = ?, pes_telefone = ?, 
+        pes_endereco = ?, pes_cep = ? where pes_codigo = ?`;
                         
-        let valores = [this.#fornEmail, this.#fornNome, this.#fornTelefone ,this.#fornEndereco, this.#fornCep];
+        let valores = [this.#fornEmail, this.#fornNome, this.#fornTelefone ,this.#fornEndereco, this.#fornCep, this.#fornId];
 
-        let id = await conexao.ExecutaComandoLastInserted(sql, valores);
+        let resultado1 = await conexao.ExecutaComandoNonQuery(sql, valores);
 
-        if (id) {
-            sql = `insert into tb_juridica (jur_cnpj, cod_pessoa) 
-                         VALUES (?,?)`;
-            let valores = [this.#fornCnpj, id];
-            let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
-            
-            return resultado;
-        } else return false;
+        sql = `update tb_juridica set jur_cnpj = ? where cod_pessoa = ?`;
+                        
+         valores = [this.#fornCnpj, this.#fornId];
+       
+         let resultado2 = await conexao.ExecutaComandoNonQuery(sql, valores);
+
+         return resultado1 && resultado2;
     }
 
 
@@ -153,7 +153,20 @@ class FornecedorModel {
         return lista;
     }
 
-    
+    async deletarFornecedor(id) {
+        
+        let sql = "delete from tb_juridica where cod_pessoa = ?";
+        let valores = [id];
+
+        let result1 = await conexao.ExecutaComandoNonQuery(sql, valores);
+
+        sql = "delete from tb_pessoa where pes_codigo = ?";
+        valores = [id];
+
+        let result2 = await conexao.ExecutaComandoNonQuery(sql, valores);
+
+        return result1 && result2;
+    }
 }
 
 
