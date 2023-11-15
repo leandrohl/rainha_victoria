@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function gravarProduto() {
 
-        let id = document.getElementById("produtoId");
+        let codigo = document.getElementById("produtoCodigo");
         let descricao = document.getElementById("produtoDescricao");
         let preco = document.getElementById("produtoPreco");
         let quantidade = document.getElementById("produtoQuantidade");
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if(validarCampos(descricao, preco, quantidade)) {
            
             var produto = {
-                id: id.value,
+                codigo: codigo.value,
                 descricao: descricao.value,
                 preco: preco.value,
                 quantidade: quantidade.value
@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(function(resposta2) {
                 if(resposta2.ok) {
                     alert(resposta2.msg);
+                    codigo.value = "";
                     descricao.value = "";
                     preco.value = "";
                     quantidade.value = "";              

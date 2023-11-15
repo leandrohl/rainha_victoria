@@ -7,20 +7,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function gravarFornecedor() {
 
-        let Nome = document.getElementById("nome");
-        let Cnpj = document.getElementById("cnpj");
-        let Email = document.getElementById("email");
-        let Endereco = document.getElementById("endereco");
-        let Cep = document.getElementById("cep");
+        let nome = document.getElementById("fornecedorNome");
+        let cnpj = document.getElementById("fornecedorCnpj");
+        let email = document.getElementById("fornecedorEmail");
+        let telefone = document.getElementById("fornecedorTelefone");
+        let endereco = document.getElementById("fornecedorEndereco");
+        let cep = document.getElementById("fornecedorCep");
 
-        if(validarCampos(Cnpj, Nome, Email, Endereco, Cep)) {
+        if(validarCampos(cnpj, nome, email, endereco, cep)) {
            
             var fornecedor = {
-                nome: Nome.value,
-                cnpj: Cnpj.value,
-                email: Email.value,
-                endereco: Endereco.value,
-                cep: Cep.value
+                nome: nome.value,
+                cnpj: cnpj.value,
+                email: email.value,
+                telefone: telefone.value,
+                endereco: endereco.value,
+                cep: cep.value
             }
 
             fetch('/fornecedor/cadastrar', {
@@ -36,11 +38,11 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(function(resposta2) {
                 if(resposta2.ok) {
                     alert(resposta2.msg);
-                    Nome.value = "";
-                    Cnpj.value = "";     
-                    Email.value = "";
-                    Endereco.value = "";  
-                    Cep.value = "";  
+                    nome.value = "";
+                    cnpj.value = "";     
+                    email.value = "";
+                    endereco.value = "";  
+                    cep.value = "";  
                     window.location.href = '/fornecedor';
                 }
                 else{

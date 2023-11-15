@@ -4,16 +4,16 @@ const conexao = new Database();
 
 class ProdutoModel {
 
-    #proId;
+    #proCodigo;
     #proDescricao;
     #proPreco;
     #proQuantidade;
 
-    get proId() {
-        return this.#proId;
+    get proCodigo() {
+        return this.#proCodigo;
     }
-    set proId(proId){
-        this.#proId = proId;
+    set proCodigo(proCodigo){
+        this.#proCodigo = proCodigo;
     }
 
     get proDescricao() {
@@ -38,9 +38,8 @@ class ProdutoModel {
         this.#proQuantidade = proQuantidade;
     }
 
-    constructor(proId, proDescricao, proPreco, proQuantidade){
-        
-        this.#proId = proId;
+    constructor(proCodigo, proDescricao, proPreco, proQuantidade){
+        this.#proCodigo = proCodigo;
         this.#proDescricao = proDescricao;
         this.#proPreco = proPreco;
         this.#proQuantidade = proQuantidade;
@@ -54,7 +53,7 @@ class ProdutoModel {
 
         if(rows.length > 0) {
             let produto = new ProdutoModel();
-            produto.proId = rows[0]["prod_Cod"];
+            produto.proCodigo = rows[0]["prod_Cod"];
             produto.proDescricao = rows[0]["prod_Desc"];
             produto.proPreco = rows[0]["prod_Preco"];
             produto.proQuantidade = rows[0]["prod_Quant"];
@@ -66,25 +65,22 @@ class ProdutoModel {
     }
 
     async salvarProduto() {
-        if(this.#proId == 0){
-            let sql = `insert into tb_produto
-                        (prod_Desc, prod_Preco, prod_Quant)
-                        values (?, ?, ?)`;
-            let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade];
+        let sql = `insert into tb_produto
+                    (prod_Cod, prod_Desc, prod_Preco, prod_Quant)
+                    values (?, ?, ?, ?)`;
+        let valores = [this.#proCodigo, this.#proDescricao, this.#proPreco, this.#proQuantidade];
+        let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
+        return resultado;
+    }
 
-            let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
-
-            return resultado;
-        }
-        else{
+    async editarProduto() {
             let sql = `update tb_produto set prod_Desc = ?, prod_Preco = ?, 
                         prod_Quant = ? where prod_Cod = ?`;
-            let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade, this.#proId];
+            let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade, this.#proCodigo];
 
             let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
 
             return resultado;
-        }
     }
 
     async listarProdutos() {

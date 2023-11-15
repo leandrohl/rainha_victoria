@@ -10,21 +10,22 @@
             <th>Descrição</th>
             <th>Preço</th>
             <th>Quantidade</th>
+            <th>Ações</th>
         </thead>
         <tbody>
             <% for(let i=0; i<lista.length; i++) { %>
 
                 <tr>
-                    <td><%= lista[i].proId %></td>
+                    <td><%= lista[i].proCodigo %></td>
                     <td><%= lista[i].proDescricao %></td>
                     <td><%= lista[i].proPreco %></td>
                     <td><%= lista[i].proQuantidade %></td>
                     <td>
                         <div>
-                            <a href="/produtos/alterar/<%= lista[i].proId %>" class="btn btn-primary">
+                            <a href="/produtos/alterar/<%= lista[i].proCodigo %>" class="btn btn-primary">
                                 <i class="fas fa-pen"></i>
                             </a>
-                            <button data-id="<%= lista[i].proId %>" class="btn btn-danger btnExclusao">
+                            <button data-id="<%= lista[i].proCodigo %>" class="btn btn-danger btnExclusao">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>

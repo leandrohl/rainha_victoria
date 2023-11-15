@@ -3,16 +3,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("btnGravar").addEventListener('click', gravarProduto);
 
-
+    let codigo = document.getElementById("produtoCodigo");
     let descricao = document.getElementById("produtoDescricao");
     let preco = document.getElementById("produtoPreco");
     let quantidade = document.getElementById("produtoQuantidade");
 
     function gravarProduto() {
         
-        if(validarCampos(descricao, preco, quantidade)) {
+        if(validarCampos(codigo, descricao, preco, quantidade)) {
            
             var produto = {
+                codigo: codigo.value,
                 descricao: descricao.value,
                 preco: preco.value,
                 quantidade: quantidade.value
@@ -45,14 +46,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function validarCampos(descricao, preco, quantidade) {
+    function validarCampos(codigo, descricao, preco, quantidade) {
         
         //limpa a estilização antes
-        /*descricao.style.borderColor = "";
+        codigo.style.borderColor = "";
+        descricao.style.borderColor = "";
         preco.style.borderColor = "";
-        quantidade.style.borderColor = "";*/
+        quantidade.style.borderColor = "";
 
         let erros = [];
+        if(codigo.value == "")
+        erros.push(codigo);
         if(descricao.value == "")
             erros.push(descricao);
         if(preco.value == "")

@@ -14,11 +14,10 @@ class ProdutoController {
     }
 
     async alterarView(req, res) {
-        //console.log(req.params.id)
         if(req.params.id != undefined){
             let produto = new ProdutoModel();
             produto = await produto.obterProdutoPorId(req.params.id);
-            res.render('produto/alterar', {produto: produto});
+            res.render('produto/alterar', {produto: produto, layout: 'layoutADM'});
         }
         else
             res.redirect("/")
@@ -40,8 +39,8 @@ class ProdutoController {
     }
 
     async cadastrar(req, res) {
-        if(req.body.descricao != '' && req.body.preco != '' && req.body.quantidade != ''){
-            let produto = new ProdutoModel(0, req.body.descricao, req.body.preco, req.body.quantidade);
+        if(req.body.codigo && req.body.descricao != '' && req.body.preco != '' && req.body.quantidade != ''){
+            let produto = new ProdutoModel(req.body.codigo, req.body.descricao, req.body.preco, req.body.quantidade);
             let resultado = await produto.salvarProduto();
 
             if(resultado == true){
@@ -55,14 +54,13 @@ class ProdutoController {
     }
 
     async alterar(req, res) {
-        //console.log(req.body)
-        if(req.body.id > 0 && req.body.descricao != ''  && req.body.preco != '' 
+        if(req.body.codigo > 0 && req.body.descricao != ''  && req.body.preco != '' 
         && req.body.quantidade != '') {
             
-            let produto = new ProdutoModel(req.body.id, req.body.descricao, 
+            let produto = new ProdutoModel(req.body.codigo, req.body.descricao, 
             req.body.preco, req.body.quantidade)
             
-            let resultado = await produto.salvarProduto();
+            let resultado = await produto.editarProduto();
 
             if(resultado == true)
                 res.send({ok: true, msg: "Produto alterado"})

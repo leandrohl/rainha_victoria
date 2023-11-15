@@ -8,8 +8,10 @@
             <th>Cnpj</th>
             <th>Nome</th>
             <th>Email</th>
+            <th>Telefone</th>
             <th>Endereco</th>
             <th>CEP</th>
+            <th>Ações</th>
         </thead>
         <tbody>
             <% for(let i=0; i<lista.length; i++) { %>
@@ -18,8 +20,19 @@
                     <td><%= lista[i].fornCnpj %></td>
                     <td><%= lista[i].fornNome %></td>
                     <td><%= lista[i].fornEmail %></td>
+                    <td><%= lista[i].fornTelefone %></td>
                     <td><%= lista[i].fornEndereco %></td>
                     <td><%= lista[i].fornCep %></td>
+                    <td>
+                        <div>
+                            <a href="/fornecedor/alterar/<%= lista[i].fornId %>" class="btn btn-primary">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <button data-id="<%= lista[i].fornId %>" class="btn btn-danger btnExclusao">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
 
             <% } %>
