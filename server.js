@@ -11,6 +11,7 @@ const BlogRoute = require('./routes/blogRoute');
 const ContatoRoute = require('./routes/contatoRoute');
 const UsuarioRoute = require('./routes/usuarioRoute');
 const LoginRoute = require('./routes/loginRoute');
+const CompraRoute = require('./routes/compraRoute');
 
 const Autenticacao = require('./middlewares/autenticacao');
 
@@ -53,6 +54,8 @@ let fornecedorRota = new FornecedorRoute();
 app.use('/fornecedor', fornecedorRota.router);
 let usuarioRota = new UsuarioRoute();
 app.use('/usuarios', usuarioRota.router);
+let compraRota = new CompraRoute();
+app.use('/compras', compraRota.router);
 
 app.listen('5000', function () {
     console.log("servidor web iniciado no link: localhost:5000");

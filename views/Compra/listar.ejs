@@ -1,0 +1,38 @@
+
+<script src="/js/Compra/listar.js"></script>
+<div>
+    <h1>Compras cadastrados</h1>
+    <a class="btn btn-primary" href="/compras/cadastrar">Cadastrar compra</a>
+
+    <table style="margin-top:10px" class="table table-stripped">
+        <thead>
+            <th>Nº da Nota</th>
+            <th>CNPJ</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <!-- <th>Ações</th> -->
+        </thead>
+        <tbody>
+            <% for(let i=0; i<lista.length; i++) { %>
+
+                <tr>
+                    <td><%= lista[i].compCod %></td>
+                    <td><%= lista[i].compCodigoPessoa %></td>
+                    <td><%= lista[i].compValor %></td>
+                    <td><%= lista[i].compData %></td>
+                    <!-- <td>
+                        <div>
+                            <a href="/compras/alterar/<%= lista[i].compCodigo %>" class="btn btn-primary">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <button data-id="<%= lista[i].compCodigo %>" class="btn btn-danger btnExclusao">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td> -->
+                </tr>
+
+            <% } %>
+        </tbody>
+    </table>
+</div>

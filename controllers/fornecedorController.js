@@ -73,6 +73,18 @@ class fornecedorController{
         }
     }
 
+    async filtrar(req, res) {
+        let fornecedor = new FornecedorModel();
+        let lista = await fornecedor.filtrarFornecedorPorCNPJ(req.body.cnpjBusca);
+        let listaJSON = [];
+
+        lista.forEach(function(value, index) {
+            listaJSON.push(value.toJSON());
+        })
+
+        res.send({ lista: lista.toJSON});
+    }
+
 }
 
 module.exports = fornecedorController;

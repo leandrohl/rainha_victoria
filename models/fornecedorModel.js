@@ -167,6 +167,35 @@ class FornecedorModel {
 
         return result1 && result2;
     }
+
+
+    async filtrarFornecedorPorCNPJ(cnpjBusca) {
+        let sql = `select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa where j.jur_cnpj like %${cnpjBusca}%`
+   
+        let rows = await conexao.ExecutaComando(sql)
+
+        for(let i=0; i<rows.length; i++){
+            let row = rows[i];
+        
+            
+            let fornecedor = new FornecedorModel(row["pes_codigo"], row["jur_cnpj"], 
+            row["pes_nome"],row["pes_email"], row["pes_telefone"], row["pes_endereco"], row["pes_cep"]);
+            lista.push(fornecedor);
+        }
+
+        return lista;
+    }
+
+    toJSON() {
+        return {
+            "fornId": this.#fornId,
+            "fornCnpj": this.#fornCnpj,
+            "fornEmail": this.#fornEmail,
+            "fornEndereco": this.#fornEndereco,
+            "fornTelefone": this.#fornTelefone,
+            "fornNome": this.#fornNome,
+        } 
+    }
 }
 
 
