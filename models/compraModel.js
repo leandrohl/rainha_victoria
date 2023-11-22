@@ -45,14 +45,14 @@ class CompraModel {
         this.#compData = compData;
     }
 
-    async obterCompraPorId(id) {
+    async obterCompraPorCodigo(id) {
         let sql = "select * from tb_compra where comp_Cod = ?";
         let valores = [id];
 
         let rows = await conexao.ExecutaComando(sql, valores);
 
         if(rows.length > 0) {
-            let compra = new compraModel();
+            let compra = new CompraModel();
             compra.compCod = rows[0]["comp_Cod"];
             compra.compCodigoPessoa = rows[0]["Pessoa_cod_pessoa"];
             compra.compValor = rows[0]["comp_Valor"];
@@ -69,8 +69,8 @@ class CompraModel {
                     (comp_Cod, Pessoa_cod_pessoa, comp_Valor, comp_Data)
                     values (?, ?, ?, ?)`;
         let valores = [this.#compCod, this.#compCodigoPessoa, this.#compValor, this.#compData];
-        let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
-        return resultado;
+        await conexao.ExecutaComandoNonQuery(sql, valores);
+        return this.#compCod;
     }
 
     async editarCompra() {

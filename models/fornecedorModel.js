@@ -169,31 +169,36 @@ class FornecedorModel {
     }
 
 
-    async filtrarFornecedorPorCNPJ(cnpjBusca) {
-        let sql = `select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa where j.jur_cnpj like %${cnpjBusca}%`
+    async obterFornecedorPorCNPJ(cnpj) {
+        let sql = `select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa where j.jur_cnpj = ${cnpj}`
    
         let rows = await conexao.ExecutaComando(sql)
 
-        for(let i=0; i<rows.length; i++){
-            let row = rows[i];
-        
-            
-            let fornecedor = new FornecedorModel(row["pes_codigo"], row["jur_cnpj"], 
-            row["pes_nome"],row["pes_email"], row["pes_telefone"], row["pes_endereco"], row["pes_cep"]);
-            lista.push(fornecedor);
+        if(rows.length > 0) {
+            let fornecedor = new FornecedorModel();
+            fornecedor.#fornId = rows[0]["pes_codigo"];
+            fornecedor.#fornNome = rows[0]["pes_nome"];
+            fornecedor.fornCnpj = rows[0]["jur_cnpj"];
+            fornecedor.fornEmail = rows[0]["pes_email"];   
+            fornecedor.fornTelefone = rows[0]["pes_telefone"];   
+            fornecedor.fornEndereco = rows[0]["pes_endereco"];   
+            fornecedor.fornCep = rows[0]["pes_cep"];   
+
+            return fornecedor;
         }
 
-        return lista;
+        return null;
     }
 
     toJSON() {
         return {
-            "fornId": this.#fornId,
-            "fornCnpj": this.#fornCnpj,
-            "fornEmail": this.#fornEmail,
-            "fornEndereco": this.#fornEndereco,
-            "fornTelefone": this.#fornTelefone,
-            "fornNome": this.#fornNome,
+            "id": this.#fornId,
+            "cnpj": this.#fornCnpj,
+            "email": this.#fornEmail,
+            "endereco": this.#fornEndereco,
+            "telefone": this.#fornTelefone,
+            "cep": this.#fornCep,
+            "nome": this.#fornNome,
         } 
     }
 }

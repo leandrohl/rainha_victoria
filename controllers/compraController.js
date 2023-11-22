@@ -1,5 +1,7 @@
 const CompraModel = require("../models/compraModel");
 const ProdutoModel = require("../models/produtoModel");
+const FornecedorModel = require("../models/fornecedorModel");
+const ItensCompraModel = require("../models/itensCompraModel");
 
 
 class CompraController {
@@ -41,16 +43,34 @@ class CompraController {
         }
     }
 
-    async cadastrar(req, res) {
-        if(req.body.codigo && req.body.codigoPessoa != '' && req.body.valor != '' && req.body.data != ''){
-            let compra = new CompraModel(req.body.codigo, req.body.codigoPessoa, req.body.valor, req.body.data);
-            let resultado = await compra.salvarCompra();
+    async gravarCompra(req, res) {
+        const listaProdutos = req.body.listaProdutos;
+        if(req.body.codigo && req.body.cnpj != '' && req.body.valor != '' && req.body.data != '' && listaProdutos != null & listaProdutos.length > 0){
+            let fornecedor = new FornecedorModel();
+            fornecedor = await fornecedor.obterFornecedorPorCNPJ(req.body.cnpj);
+            
+            if (fornecedor != null) {
+                let compra = new CompraModel(req.body.codigo, fornecedor.fornId, req.body.valor, req.body.data);
+                
+                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo);
 
-            if(resultado == true){
-                res.send({ok: true, msg: "Compra adicionado!"})
+                if (compraExistente != null) {
+                    res.send({ ok: true, msg: "Já existe uma compra com esse código!"});
+                    return;
+                }
+
+                const codigoCompra = await compra.salvarCompra();
+
+                for (let i = 0; i < listaProdutos.length; i++) {
+                    let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
+
+                    await compraItem.gravar();
+                }
+                45454465454
+                res.send({ ok: true, msg: "Compra gravada com sucesso"})
+            } else {
+                res.send({ok: false, msg: "Não existe um fornecedor cadastrado com esse CNPJ!"});
             }
-            else
-                res.send({ok: false, msg: "Erro ao inserir compra!"})
         }
         else
             res.send({ok: false, msg: "Dados inválidos!"})
@@ -59,6 +79,7 @@ class CompraController {
     async alterar(req, res) {
         if(req.body.codigo > 0 && req.body.codigoPessoa != ''  && req.body.valor != '' 
         && req.body.data != '') {
+            
             
             let compra = new CompraModel(req.body.codigo, req.body.codigoPessoa, 
             req.body.valor, req.body.data)

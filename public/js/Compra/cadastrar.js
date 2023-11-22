@@ -139,12 +139,13 @@ document.addEventListener("DOMContentLoaded", function() {
            
             var compra = {
                 codigo: codigo.value,
-                codigoPessoa: 5,
+                cnpj: cnpj.value,
                 valor: valor.value,
-                data: data.value
+                data: data.value,
+                listaProdutos,
             }
 
-            fetch('/compras/cadastrar', {
+            fetch('/compras/gravar-compra', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(function(resposta2) {
                 if(resposta2.ok) {
                     alert(resposta2.msg);
+                    codigo.value = ""
                     cnpj.value = "";
                     valor.value = "";
                     data.value = "";              
