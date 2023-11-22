@@ -1,15 +1,140 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    let listaProdutos = [];
     document.getElementById("btnGravar").addEventListener('click', gravarCompra);
+    document.getElementById("btnAdd").addEventListener('click', adicionarItemACompra);
 
-    let codigo = document.getElementById("compraCodigo");
-    let cnpj = document.getElementById("compraCnpj");
-    let valor = document.getElementById("compraValor");
-    let data = document.getElementById("compraData");
+    function removerProduto() {
+        let id = this.dataset.id;
+
+        listaProdutos = listaProdutos.filter(produto => produto.id != id);
+        this.parentElement.parentElement.remove();
+    }
+
+
+    function montarTabelaProdutos() {
+        if (listaProdutos.length > 0) {
+            let valorTotal = 0;
+            let html = `<table class='table'>
+                            <thead>
+                                <th> Código </th>
+                                <th> Descricao </th>
+                                <th> Valor Unitário </th>
+                                <th> Valor Total </th>
+                                <th> Quantidade </th>
+                            </thead>
+                            <tbody>
+                        `;
+            
+            for(let i=0; i < listaProdutos.length; i++) {
+                let produto = listaProdutos[i];
+                valorTotal += parseFloat(produto.valor);
+                html += `
+                    <tr>
+                        <td> ${produto.id}  </td>
+                        <td> ${produto.descricao}  </td>
+                        <td> R$ ${parseFloat(produto.preco).toFixed(2)}  </td>
+                        <td> R$ ${parseFloat(produto.valor).toFixed(2)}  </td>
+                        <td> ${produto.quantidade} </td>
+                        <td> 
+                            <button class='btn btn-outline-danger btnRemover' data-id='${produto.id}'> Remover </button>
+                        </td>
+                    `
+            }
+            html += `</tbody>
+                </table>
+            `
+
+            html += `<div>
+                        <h4 style="text-align:end"> Valor total: R$<span> ${valorTotal.toFixed(2)} </span> </h4>
+                    </div>
+                `
+
+
+
+            document.getElementById("corpoTabela").innerHTML = html;
+
+
+            let btnRemover = document.querySelectorAll('.btnRemover');
+            btnRemover.forEach(function(value, index) {
+                value.onclick = removerProduto;
+            })
+        } else {
+            document.getElementById("corpoTabela").innerHTML = `<span class='alert alert-info'> Nenhum produto adicionado! </span>`
+        }
+    }
+
+    function adicionarItemACompra() {
+        let id = document.getElementById("select-produto");
+        let quantidade = document.getElementById("itemQuantidade");
+        let valorPagoUnitario = document.getElementById("itemValorPago");
+
+        if (validarCamposProduto(id, quantidade, valorPagoUnitario)) {
+            const data = {
+                id: id.value,
+                quantidade: quantidade.value,
+                valorPagoUnitario: valorPagoUnitario.value
+            }
+            fetch('/produtos/obter/' + data.id)
+            .then(r => {
+                return r.json()
+            })
+            .then(r => {
+                if (r.ok) {
+                    let produto = listaProdutos.find(p => p.id == r.produto.id);
+    
+                    if (produto != null) {
+                        listaProdutos = listaProdutos.filter(p => p.id !== r.produto.id)
+                    }
+    
+                    r.produto.preco = data.valorPagoUnitario;
+                    r.produto.valor = data.valorPagoUnitario * data.quantidade;
+                    r.produto.quantidade = data.quantidade;
+                    listaProdutos.push(r.produto);
+    
+                    montarTabelaProdutos();
+                } else {
+                    alert(r.msg);
+                }
+            })
+        } else {
+            alert("Preencha os campos destacados corretamente!");
+        }
+    }
+
+    function validarCamposProduto(produto, quantidade, valorPagoUnitario) {
+        produto.classList.remove("is-invalid")
+        quantidade.classList.remove("is-invalid")
+        valorPagoUnitario.classList.remove("is-invalid")
+
+        let erros = [];
+        if(produto.value == "")
+        erros.push(produto);
+        if(quantidade.value == "")
+            erros.push(quantidade);
+        if(valorPagoUnitario.value == "")
+            erros.push(valorPagoUnitario);
+
+        if(erros.length > 0) {
+            for(let i = 0; i<erros.length; i++){
+                erros[i].classList.add("is-invalid");
+            }
+            return false;
+        }
+        else {
+
+            return true;
+        }
+    }
 
     function gravarCompra() {
         
+        let codigo = document.getElementById("compraCodigo");
+        let cnpj = document.getElementById("compraCnpj");
+        let valor = document.getElementById("compraValor");
+        let data = document.getElementById("compraData");
+
         if(validarCampos(codigo, cnpj, valor, data)) {
            
             var compra = {
@@ -18,8 +143,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 valor: valor.value,
                 data: data.value
             }
-
-            console.log(compra)
 
             fetch('/compras/cadastrar', {
                 method: 'POST',

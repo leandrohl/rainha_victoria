@@ -1,4 +1,5 @@
 const CompraModel = require("../models/compraModel");
+const ProdutoModel = require("../models/produtoModel");
 
 
 class CompraController {
@@ -9,8 +10,10 @@ class CompraController {
         res.render('compra/listar', {lista: listaCompra, layout: 'layoutADM'});
     }
 
-    cadastrarView(req, res) {
-        res.render('compra/cadastrar', { layout: 'layoutADM' });
+    async cadastrarView(req, res) {
+        let produto = new ProdutoModel()
+        let listaProduto = await produto.listarProdutos()
+        res.render('compra/cadastrar', { listaProduto: listaProduto, layout: 'layoutADM' });
     }
 
     async alterarView(req, res) {

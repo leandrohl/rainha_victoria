@@ -71,6 +71,28 @@ class ProdutoController {
             res.send({ok: false, msg: "Dados inválidos"})
         }
     }
+
+    async obterProduto(req, res) {
+        if(req.params.id != undefined){
+            let produto = new ProdutoModel();
+            produto = await produto.obterProdutoPorId(req.params.id);
+
+            if (produto != null) {
+                let produtoJson = {
+                    id: produto.proCodigo,
+                    descricao: produto.proDescricao,
+                    preco: produto.proPreco,
+                    quantidade: produto.proQuantidade
+                }
+                
+                res.send({ok: true, produto: produtoJson});
+            } else {
+                res.send({ok: false, msg: "Produto nao encontrado"});
+            }
+        }
+        else
+        res.send({ok: false, msg: "Parametros inválidos"});
+    }
 }
 
 module.exports = ProdutoController;

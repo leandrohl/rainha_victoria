@@ -14,6 +14,7 @@ class ProdutoRoute {
 
         let ctrl = new ProdutoController();
         this.#router.get('/', ctrl.listarView);
+        this.#router.get('/obter/:id', ctrl.obterProduto);
         this.#router.get('/cadastrar', ctrl.cadastrarView);
         this.#router.post('/cadastrar', ctrl.cadastrar);
         this.#router.post('/excluir', ctrl.excluir);
