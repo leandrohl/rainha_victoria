@@ -1,10 +1,16 @@
-
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="/js/Compra/listar.js"></script>
 <div>
     <h1>Compras cadastrados</h1>
-    <a class="btn btn-primary" href="/compras/cadastrar">Cadastrar compra</a>
 
-    <table style="margin-top:10px" class="table table-stripped">
+    
+    <div>
+        <a class="btn btn-primary" id="btnCadastrarCompras" href="/compras/cadastrar">Cadastrar compra</a>
+        <button id="btnExportarPdf" onclick="window.print()" class="btn btn-primary">Exportar para PDF</button>
+        <button id="btnExportarExcel" class="btn btn-primary">Exportar para Excel</button>
+    </div>
+
+    <table style="margin-top:10px" id="tabelaCompras" class="table table-stripped">
         <thead>
             <th>Nº da Nota</th>
             <th>Fornecedor</th>

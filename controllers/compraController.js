@@ -54,21 +54,20 @@ class CompraController {
             if (fornecedor != null) {
                 let compra = new CompraModel(req.body.codigo, fornecedor.fornId, req.body.valor, req.body.data);
                 
-                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo);
+                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo, conexao);
 
                 if (compraExistente != null) {
                     res.send({ ok: true, msg: "Já existe uma compra com esse código!"});
                     return;
                 }
 
-                const codigoCompra = await compra.salvarCompra();
+                const codigoCompra = await compra.salvarCompra(conexao);
 
                 for (let i = 0; i < listaProdutos.length; i++) {
                     let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
 
                     await compraItem.gravar();
                 }
-                45454465454
                 res.send({ ok: true, msg: "Compra gravada com sucesso"})
             } else {
                 res.send({ok: false, msg: "Não existe um fornecedor cadastrado com esse CNPJ!"});
