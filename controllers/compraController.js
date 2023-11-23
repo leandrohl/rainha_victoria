@@ -2,26 +2,28 @@ const CompraModel = require("../models/compraModel");
 const ProdutoModel = require("../models/produtoModel");
 const FornecedorModel = require("../models/fornecedorModel");
 const ItensCompraModel = require("../models/itensCompraModel");
+const Database = require('../utils/database')
 
+const conexao = new Database();
 
 class CompraController {
 
     async listarView(req, res) {
         let compra = new CompraModel();
-        let listaCompra = await compra.listarCompras()
+        let listaCompra = await compra.listarCompras(conexao)
         res.render('compra/listar', {lista: listaCompra, layout: 'layoutADM'});
     }
 
     async cadastrarView(req, res) {
         let produto = new ProdutoModel()
-        let listaProduto = await produto.listarProdutos()
+        let listaProduto = await produto.listarProdutos(conexao)
         res.render('compra/cadastrar', { listaProduto: listaProduto, layout: 'layoutADM' });
     }
 
     async alterarView(req, res) {
         if(req.params.id != undefined){
             let compra = new CompraModel();
-            compra = await compra.obterCompraPorId(req.params.id);
+            compra = await compra.obterCompraPorId(req.params.id, conexao);
             res.render('compra/alterar', {compra: compra, layout: 'layoutADM'});
         }
         else
@@ -32,7 +34,7 @@ class CompraController {
     async excluir(req, res) {
         if(req.body.id != ""){
             let compra = new CompraModel();
-            let result = await compra.deletarCompra(req.body.id);
+            let result = await compra.deletarCompra(req.body.id,conexao);
             if(result == true)
                 res.send({ok: true, msg: "Compra excluído!"});
             else

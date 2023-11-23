@@ -1,6 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    
+    let datas = document.querySelectorAll('.dataFormatada');
+    datas.forEach(function(value, index) {
+        value.innerText = formatarData(value.innerText)
+     })
+
+    function formatarData(data) {
+        var dataCompleta = new Date(data);
+        var dia = dataCompleta.getDate();
+        var mes = dataCompleta.getMonth() + 1;
+        var ano = dataCompleta.getFullYear();
+        return dia + '/' + mes + '/' + ano;
+    }
 
     function montarFornecedores(lista) {
         let htmlBody = "<tbody>";

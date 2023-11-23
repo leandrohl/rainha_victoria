@@ -1,6 +1,6 @@
-const Database = require('../utils/database')
+// const Database = require('../utils/database')
 
-const conexao = new Database();
+// const conexao = new Database();
 
 class ProdutoModel {
 
@@ -45,7 +45,7 @@ class ProdutoModel {
         this.#proQuantidade = proQuantidade;
     }
 
-    async obterProdutoPorId(id) {
+    async obterProdutoPorId(id, conexao) {
         let sql = "select * from tb_produto where prod_Cod = ?";
         let valores = [id];
 
@@ -64,7 +64,7 @@ class ProdutoModel {
         return null;
     }
 
-    async salvarProduto() {
+    async salvarProduto(conexao) {
         let sql = `insert into tb_produto
                     (prod_Cod, prod_Desc, prod_Preco, prod_Quant)
                     values (?, ?, ?, ?)`;
@@ -73,7 +73,7 @@ class ProdutoModel {
         return resultado;
     }
 
-    async editarProduto() {
+    async editarProduto(conexao) {
             let sql = `update tb_produto set prod_Desc = ?, prod_Preco = ?, 
                         prod_Quant = ? where prod_Cod = ?`;
             let valores = [this.#proDescricao, this.#proPreco, this.#proQuantidade, this.#proCodigo];
@@ -83,7 +83,7 @@ class ProdutoModel {
             return resultado;
     }
 
-    async listarProdutos() {
+    async listarProdutos(conexao) {
         let lista = [];
         
         let sql = "select * from tb_produto"
@@ -102,7 +102,7 @@ class ProdutoModel {
         return lista;
     }
 
-    async deletarProduto(id) {
+    async deletarProduto(id, conexao) {
         
         let sql = "delete from tb_produto where prod_Cod = ?";
         let valores = [id];

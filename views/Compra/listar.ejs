@@ -7,7 +7,7 @@
     <table style="margin-top:10px" class="table table-stripped">
         <thead>
             <th>Nº da Nota</th>
-            <th>CNPJ</th>
+            <th>Fornecedor</th>
             <th>Valor</th>
             <th>Data</th>
             <!-- <th>Ações</th> -->
@@ -17,9 +17,9 @@
 
                 <tr>
                     <td><%= lista[i].compCod %></td>
-                    <td><%= lista[i].compCodigoPessoa %></td>
+                    <td><%= lista[i].fornNome %></td>
                     <td><%= lista[i].compValor %></td>
-                    <td><%= lista[i].compData %></td>
+                    <td class="dataFormatada"><%= lista[i].compData %></td>
                     <!-- <td>
                         <div>
                             <a href="/compras/alterar/<%= lista[i].compCodigo %>" class="btn btn-primary">

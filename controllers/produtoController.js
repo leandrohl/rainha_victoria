@@ -1,11 +1,13 @@
 const ProdutoModel = require("../models/produtoModel");
+const Database = require('../utils/database')
 
+const conexao = new Database();
 
 class ProdutoController {
 
     async listarView(req, res) {
         let produto = new ProdutoModel();
-        let listaProduto = await produto.listarProdutos()
+        let listaProduto = await produto.listarProdutos(conexao)
         res.render('produto/listar', {lista: listaProduto, layout: 'layoutADM'});
     }
 
@@ -16,7 +18,7 @@ class ProdutoController {
     async alterarView(req, res) {
         if(req.params.id != undefined){
             let produto = new ProdutoModel();
-            produto = await produto.obterProdutoPorId(req.params.id);
+            produto = await produto.obterProdutoPorId(req.params.id, conexao);
             res.render('produto/alterar', {produto: produto, layout: 'layoutADM'});
         }
         else
@@ -27,7 +29,7 @@ class ProdutoController {
     async excluir(req, res) {
         if(req.body.id != ""){
             let produto = new ProdutoModel();
-            let result = await produto.deletarProduto(req.body.id);
+            let result = await produto.deletarProduto(req.body.id, conexao);
             if(result == true)
                 res.send({ok: true, msg: "Produto excluído!"});
             else
@@ -41,7 +43,7 @@ class ProdutoController {
     async cadastrar(req, res) {
         if(req.body.codigo && req.body.descricao != '' && req.body.preco != '' && req.body.quantidade != ''){
             let produto = new ProdutoModel(req.body.codigo, req.body.descricao, req.body.preco, req.body.quantidade);
-            let resultado = await produto.salvarProduto();
+            let resultado = await produto.salvarProduto(conexao);
 
             if(resultado == true){
                 res.send({ok: true, msg: "Produto adicionado!"})
@@ -60,7 +62,7 @@ class ProdutoController {
             let produto = new ProdutoModel(req.body.codigo, req.body.descricao, 
             req.body.preco, req.body.quantidade)
             
-            let resultado = await produto.editarProduto();
+            let resultado = await produto.editarProduto(conexao);
 
             if(resultado == true)
                 res.send({ok: true, msg: "Produto alterado"})
@@ -75,7 +77,7 @@ class ProdutoController {
     async obterProduto(req, res) {
         if(req.params.id != undefined){
             let produto = new ProdutoModel();
-            produto = await produto.obterProdutoPorId(req.params.id);
+            produto = await produto.obterProdutoPorId(req.params.id, conexao);
 
             if (produto != null) {
                 let produtoJson = {
