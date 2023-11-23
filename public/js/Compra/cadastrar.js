@@ -128,6 +128,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function validarValorTotal(valorTotalNota) {
+        let valorTotal = 0;
+        for (let i=0; i < listaProdutos.length; i++) {
+            valorTotal += listaProdutos[i].valor;
+        }
+        return valorTotalNota === valorTotal;
+    }
+
     function gravarCompra() {
         
         let codigo = document.getElementById("compraCodigo");
@@ -135,12 +143,25 @@ document.addEventListener("DOMContentLoaded", function() {
         let valor = document.getElementById("compraValor");
         let data = document.getElementById("compraData");
 
+
+
         if(validarCampos(codigo, cnpj, valor, data)) {
-           
+            if (listaProdutos.length == 0) {
+                alert("Deve ter pelo menos um produto adicionado.");
+                return;
+            }
+
+            let valorTotal = parseFloat(valor.value.replace(',', '.'))
+
+            if (validarValorTotal(valorTotal) === false) {
+                alert("Valor total indicado não é igual ao valor total dos itens da nota!");
+                return;
+            }
+
             var compra = {
                 codigo: codigo.value,
                 cnpj: cnpj.value,
-                valor: valor.value,
+                valor: valorTotal,
                 data: data.value,
                 listaProdutos,
             }
@@ -174,12 +195,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function validarCampos(codigo, cnpj, valor, data) {
-        
-        //limpa a estilização antes
-        codigo.style.borderColor = "";
-        cnpj.style.borderColor = "";
-        valor.style.borderColor = "";
-        data.style.borderColor = "";
+    
+        codigo.classList.remove("is-invalid")
+        cnpj.classList.remove("is-invalid")
+        valor.classList.remove("is-invalid")
+        data.classList.remove("is-invalid")
 
         let erros = [];
         if(codigo.value == "")
@@ -193,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if(erros.length > 0) {
             for(let i = 0; i<erros.length; i++){
-                erros[i].style["border-color"] = "red";
+                erros[i].classList.add("is-invalid");
             }
 
             return false;

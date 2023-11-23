@@ -4,11 +4,27 @@
         text-align: end;
     }
 
-    #btnExportarPdf {
+    .btnExportarPdf {
         display: none;
     }
 
-    #btnCadastrarCompras{
+    #btnCadastrarCompras {
+        display: none;
+    }
+
+    #btnCadastrarFornecedores {
+        display: none;
+    }
+
+    #btnCadastrarProdutos {
+        display: none;
+    }
+
+    .btnExportarExcel{
+        display: none;
+    }
+
+    .actions{
         display: none;
     }
 }
