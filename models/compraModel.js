@@ -55,19 +55,20 @@ class CompraModel {
     }
 
     async obterCompraPorCodigo(id) {
-        let sql = "select * from tb_compra where comp_Cod = ?";
+        let sql = "select * from tb_compra c inner join tb_pessoa p on c.Pessoa_cod_pessoa = p.pes_codigo where comp_Cod = ?";
         let valores = [id];
 
         let rows = await conexao.ExecutaComando(sql, valores);
 
         if(rows.length > 0) {
-            let compra = new CompraModel();
-            compra.compCod = rows[0]["comp_Cod"];
-            compra.compCodigoPessoa = rows[0]["Pessoa_cod_pessoa"];
-            compra.compValor = rows[0]["comp_Valor"];
-            compra.compData = rows[0]["comp_Data"];
+            var data = {
+                compraCodigo: rows[0]["comp_Cod"],
+                nomeFornecedor: rows[0]["pes_nome"],
+                compraValor: rows[0]["comp_Valor"],
+                compraData: rows[0]["comp_Data"]
+            }
 
-            return compra;
+            return data;
         }
 
         return null;

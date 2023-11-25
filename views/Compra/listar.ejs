@@ -38,6 +38,7 @@
             <th>Fornecedor</th>
             <th>Valor</th>
             <th>Data</th>
+            <th>Açoes</th>
         </thead>
         <tbody id="corpoTabelaCompras">
             <% for(let i=0; i<lista.length; i++) { %>
@@ -46,16 +47,13 @@
                     <td><%= lista[i].nomeFornecedor %></td>
                     <td>R$ <%= lista[i].compraValor %></td>
                     <td class="dataFormatada"><%= lista[i].compraData %></td>
-                    <!-- <td>
+                    <td>
                         <div>
-                            <a href="/compras/alterar/<%= lista[i].compCodigo %>" class="btn btn-primary">
-                                <i class="fas fa-pen"></i>
+                            <a href="/compras/visualizar/<%= lista[i].compraCodigo %>" class="btn btn-primary">
+                                <i class="fas fa-eye"></i>
                             </a>
-                            <button data-id="<%= lista[i].compCodigo %>" class="btn btn-danger btnExclusao">
-                                <i class="fas fa-trash"></i>
-                            </button>
                         </div>
-                    </td> -->
+                    </td>
                 </tr>
 
             <% } %>

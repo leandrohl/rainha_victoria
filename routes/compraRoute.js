@@ -14,7 +14,8 @@ class CompraRoute {
 
         let ctrl = new CompraController();
         this.#router.get('/', ctrl.listarView);
-        this.#router.post('/listar', ctrl.listarCompras);   
+        this.#router.post('/listar', ctrl.listarCompras);  
+        this.#router.get('/visualizar/:id', ctrl.visualizarView);   
         this.#router.get('/cadastrar', ctrl.cadastrarView);
         this.#router.post('/gravar-compra', ctrl.gravarCompra);
         this.#router.post('/excluir', ctrl.excluir);

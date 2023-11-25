@@ -10,6 +10,20 @@ class CompraController {
         res.render('compra/listar', {lista: listaCompra, layout: 'layoutADM'});
     }
 
+    async visualizarView(req, res) {
+        if(req.params.id != undefined){
+            let itensCompra = new ItensCompraModel();
+            let listaItensCompra = await itensCompra.listar(req.params.id);
+
+            let compra = new CompraModel();
+            compra = await compra.obterCompraPorCodigo(req.params.id)
+
+            res.render('compra/visualizar', {lista: listaItensCompra, compra, layout: 'layoutADM'});
+        } else {
+            res.redirect("/")
+        }
+    }
+
     async cadastrarView(req, res) {
         let produto = new ProdutoModel()
         let listaProduto = await produto.listarProdutos()

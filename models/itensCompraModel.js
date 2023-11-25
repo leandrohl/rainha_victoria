@@ -1,4 +1,6 @@
 const Database = require('../utils/database')
+const ProdutoModel = require("./produtoModel");
+
 
 const conexao = new Database();
 
@@ -8,6 +10,7 @@ class ItensCompraModel {
     #produtoId;
     #compraItemQuantidade;
     #compraItemPrecoUnit;
+    #produtoNome;
 
     get compraId() {
         return this.#compraId;
@@ -39,31 +42,51 @@ class ItensCompraModel {
         this.#compraItemPrecoUnit = compraItemPrecoUnit;
     }
 
-    constructor(compraId, produtoId, compraItemQuantidade, compraItemPrecoUnit){
+    get produtoNome() {
+        return this.#produtoNome;
+    }
+
+    set produtoNome(produtoNome){
+        this.#produtoNome = produtoNome;
+    }
+
+    constructor(compraId, produtoId, compraItemQuantidade, compraItemPrecoUnit, produtoNome){
         this.#compraId = compraId;
         this.#produtoId = produtoId;
         this.#compraItemQuantidade = compraItemQuantidade;
         this.#compraItemPrecoUnit = compraItemPrecoUnit;
+        this.#produtoNome = produtoNome;
     }
 
-    // async obterCompraPorId(id) {
-    //     let sql = "select * from tb_compra where comp_Cod = ?";
-    //     let valores = [id];
+    async listar(compraId) {
+        let lista = [];
+        let sql = "select * from tb_itens_compra where ic_Compra_Codcom = ?";
+        let valores = [compraId];
 
-    //     let rows = await conexao.ExecutaComando(sql, valores);
+        let rows = await conexao.ExecutaComando(sql, valores);
 
-    //     if(rows.length > 0) {
-    //         let compra = new compraModel();
-    //         compra.compCod = rows[0]["comp_Cod"];
-    //         compra.compCodigoPessoa = rows[0]["Pessoa_cod_pessoa"];
-    //         compra.compValor = rows[0]["comp_Valor"];
-    //         compra.compData = rows[0]["comp_Data"];
 
-    //         return compra;
-    //     }
+        for(let i=0; i<rows.length; i++){
+            let row = rows[i];
 
-    //     return null;
-    // }
+
+            let produto = new ProdutoModel();
+            produto = await produto.obterProdutoPorId(row["ic_Produto_Codigo"]);
+
+            var data = {
+                compraCodigo: row["comp_Cod"],
+                produtoCodigo: row["ic_Produto_Codigo"],
+                quantidade: row["ic_Quantidade"],
+                valorUnitario: row["ic_ValorUnit"],
+                produtoNome: produto.proDescricao,
+                valor: row["ic_Quantidade"] * row["ic_ValorUnit"],
+            }
+
+            lista.push(data);
+        }
+
+        return lista;
+    }
 
     async gravar() {
         let sql = `insert into tb_itens_compra
