@@ -1,64 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    document.getElementById("btnExportarExcel").addEventListener('click', exportarExcel);
-
-    function exportarExcel() {
-
-        var wb = XLSX.utils.table_to_book(document.getElementById("tabelaCompras"));
-        XLSX.writeFile(wb, "RelatorioCompras.xlsx");
-    }
-
-    let datas = document.querySelectorAll('.dataFormatada');
-    datas.forEach(function(value, index) {
-        value.innerText = formatarData(value.innerText)
-     })
-
-    function formatarData(data) {
-        var dataCompleta = new Date(data);
-        var dia = dataCompleta.getDate();
-        var mes = dataCompleta.getMonth() + 1;
-        var ano = dataCompleta.getFullYear();
-        return dia + '/' + mes + '/' + ano;
-    }
-
-    function montarFornecedores(lista) {
-        let htmlBody = "<tbody>";
-      
-
-        lista.forEach(function(value, index) {
-            htmlBody += `<tr> 
-                <td>  </td>
-            </tr>`
-        })
-
-        htmlBody += "</tbody>";
-
-        document.querySelector("#tabela > tbody").innerHTML = htmlBody;
-    }
     
-
-    function filtrarFornecedores() {
-        fetch('/fornecedor/filtrar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ cnpjBusca })
-        })
-        .then(r => {
-            return r.json()
-        })
-        .then(r => {
-            if (r.lista.length > 0) {
-                montarFornecedores(r.lista)
-            } else {
-                alert("Nenhum pedido encontrado para a filtragem")
-            }
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
 
     let botoes = document.querySelectorAll(".btnExclusao");
 

@@ -137,7 +137,7 @@ class FornecedorModel {
     async listarFornecedor() {
         let lista = [];
 
-        let sql = "select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa"
+        let sql = "select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa order by p.pes_codigo"
 
         let rows = await conexao.ExecutaComando(sql)
 

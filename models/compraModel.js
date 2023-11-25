@@ -1,6 +1,6 @@
-// const Database = require('../utils/database')
+const Database = require('../utils/database')
 
-// const conexao = new Database();
+const conexao = new Database();
 
 class CompraModel {
 
@@ -54,7 +54,7 @@ class CompraModel {
         this.#fornNome = fornNome;
     }
 
-    async obterCompraPorCodigo(id, conexao) {
+    async obterCompraPorCodigo(id) {
         let sql = "select * from tb_compra where comp_Cod = ?";
         let valores = [id];
 
@@ -73,7 +73,7 @@ class CompraModel {
         return null;
     }
 
-    async salvarCompra(conexao) {
+    async salvarCompra() {
         let sql = `insert into tb_compra
                     (comp_Cod, Pessoa_cod_pessoa, comp_Valor, comp_Data)
                     values (?, ?, ?, ?)`;
@@ -82,7 +82,7 @@ class CompraModel {
         return this.#compCod;
     }
 
-    async editarCompra(conexao) {
+    async editarCompra() {
             let sql = `update tb_compra set Pessoa_cod_pessoa = ?, comp_Valor = ?, 
                 comp_Data = ? where comp_Cod = ?`;
             let valores = [this.#compCodigoPessoa, this.#compValor, this.#compData, this.#compCod];
@@ -92,26 +92,7 @@ class CompraModel {
             return resultado;
     }
 
-    async listarCompras(conexao) {
-        let lista = [];
-        
-        let sql = "select * from tb_compra c inner join tb_pessoa p on c.Pessoa_cod_pessoa = p.pes_codigo"
-
-        let rows = await conexao.ExecutaComando(sql)
-
-        for(let i=0; i<rows.length; i++){
-            let row = rows[i];
-            
-            let compra = new CompraModel(row["comp_Cod"], row["Pessoa_cod_pessoa"], 
-            row["comp_Valor"], row["comp_Data"], row["pes_nome"]);
-
-            lista.push(compra);
-        }
-
-        return lista;
-    }
-
-    async deletarCompra(id, conexao) {
+    async deletarCompra(id) {
         
         let sql = "delete from tb_compra where comp_Cod = ?";
         let valores = [id];
@@ -119,6 +100,40 @@ class CompraModel {
         let result = await conexao.ExecutaComandoNonQuery(sql, valores);
 
         return result;
+    }
+
+    async listar(termo, busca) {
+        let sqlWhere = "";
+        if(termo != undefined && termo != ""){
+            if(busca == "1") {
+                if(isNaN(termo) == false)
+                    sqlWhere = ` where c.comp_Cod = ${termo} `;
+            }
+            else if(busca == "2") {
+                sqlWhere = ` where p.pes_nome like '%${termo}%'  `;
+            }
+        }
+
+        let sql = `select * from tb_compra c inner join tb_pessoa p on c.Pessoa_cod_pessoa = p.pes_codigo
+        ${sqlWhere}`;
+
+        var rows = await conexao.ExecutaComando(sql);
+
+        var relatorio = [];
+
+        for(var i = 0; i < rows.length; i++){
+            var row = rows[i];
+            var data = {
+                compraCodigo: row["comp_Cod"],
+                nomeFornecedor: row["pes_nome"],
+                compraValor: row["comp_Valor"],
+                compraData: row["comp_Data"]
+            }
+
+            relatorio.push(data);
+        }
+
+        return relatorio;
     }
 }
 

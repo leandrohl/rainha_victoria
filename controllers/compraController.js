@@ -2,39 +2,48 @@ const CompraModel = require("../models/compraModel");
 const ProdutoModel = require("../models/produtoModel");
 const FornecedorModel = require("../models/fornecedorModel");
 const ItensCompraModel = require("../models/itensCompraModel");
-const Database = require('../utils/database')
-
-const conexao = new Database();
 
 class CompraController {
-
     async listarView(req, res) {
         let compra = new CompraModel();
-        let listaCompra = await compra.listarCompras(conexao)
+        let listaCompra = await compra.listar()
         res.render('compra/listar', {lista: listaCompra, layout: 'layoutADM'});
     }
 
     async cadastrarView(req, res) {
         let produto = new ProdutoModel()
-        let listaProduto = await produto.listarProdutos(conexao)
+        let listaProduto = await produto.listarProdutos()
         res.render('compra/cadastrar', { listaProduto: listaProduto, layout: 'layoutADM' });
     }
 
     async alterarView(req, res) {
         if(req.params.id != undefined){
             let compra = new CompraModel();
-            compra = await compra.obterCompraPorId(req.params.id, conexao);
+            compra = await compra.obterCompraPorId(req.params.id);
             res.render('compra/alterar', {compra: compra, layout: 'layoutADM'});
         }
         else
             res.redirect("/")
-        
+    }
+
+    async listarCompras(req, res){
+        let ok = false;
+        let listaRetorno = [];
+        if(req.body != undefined){
+            let termo = req.body.termo;
+            let busca = req.body.busca;
+            let compra = new CompraModel();
+            listaRetorno = await compra.listar(termo, busca);
+            ok = true;
+        }
+
+        res.send({ok: ok, listaRetorno: listaRetorno});
     }
 
     async excluir(req, res) {
         if(req.body.id != ""){
             let compra = new CompraModel();
-            let result = await compra.deletarCompra(req.body.id,conexao);
+            let result = await compra.deletarCompra(req.body.id);
             if(result == true)
                 res.send({ok: true, msg: "Compra excluído!"});
             else
@@ -54,14 +63,14 @@ class CompraController {
             if (fornecedor != null) {
                 let compra = new CompraModel(req.body.codigo, fornecedor.fornId, req.body.valor, req.body.data);
                 
-                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo, conexao);
+                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo);
 
                 if (compraExistente != null) {
                     res.send({ ok: true, msg: "Já existe uma compra com esse código!"});
                     return;
                 }
 
-                const codigoCompra = await compra.salvarCompra(conexao);
+                const codigoCompra = await compra.salvarCompra();
 
                 for (let i = 0; i < listaProdutos.length; i++) {
                     let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
