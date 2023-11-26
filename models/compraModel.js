@@ -136,6 +136,7 @@ class CompraModel {
 
         return relatorio;
     }
+    
 }
 
 

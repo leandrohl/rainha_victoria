@@ -27,17 +27,25 @@ class ProdutoController {
     }
 
     async excluir(req, res) {
-        if(req.body.id != ""){
-            let produto = new ProdutoModel();
-            let result = await produto.deletarProduto(req.body.id, conexao);
-            if(result == true)
-                res.send({ok: true, msg: "Produto excluído!"});
+        if (req.body.id != "") {
+            
+            const confirmacao = req.body.confirmacao === 'true';
+           
+            if (confirmacao == true){
+                let produto = new ProdutoModel();
+                let result = await produto.deletarProduto(req.body.id, conexao);
+
+                if (result == true)
+                    res.send({ ok: true, msg: "Exclusão efetuada com sucesso!" });  
+                else
+                   res.send({ ok: false, msg: "Erro ao excluir produto!" });
+            }
             else
-                res.send({ok: false, msg: "Erro ao excluir produto!"});
+                res.send({ ok: true, msg: "Exclusão cancelada!" });
+                
         }
-        else{
-            res.send({ok: false, msg: "Dados inválidos!"});
-        }
+        else
+            res.send({ ok: false, msg: "Dados inválidos!" });
     }
 
     async cadastrar(req, res) {

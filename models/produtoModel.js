@@ -112,6 +112,12 @@ class ProdutoModel {
 
         return result;
     }
+
+    async atualizarQuantidadeEstoque(novoEstoque, proCodigo) {
+        let sql = `UPDATE tb_produto SET prod_Quant = ${novoEstoque} WHERE prod_Cod = ${proCodigo}`;
+        await conexao.ExecutaComando(sql);
+      }
+
 }
 
 

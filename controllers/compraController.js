@@ -87,9 +87,13 @@ class CompraController {
                 const codigoCompra = await compra.salvarCompra();
 
                 for (let i = 0; i < listaProdutos.length; i++) {
+                    let produtoQuant = listaProdutos[i];
                     let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
+                    let produto = new ProdutoModel();
+                    let estoque = await produto.obterProdutoPorId(produtoQuant.id);
 
                     await compraItem.gravar();
+                    await produto.atualizarQuantidadeEstoque(parseInt(estoque.proQuantidade) + parseInt(produtoQuant.quantidade), estoque.proCodigo);
                 }
                 res.send({ ok: true, msg: "Compra gravada com sucesso"})
             } else {
