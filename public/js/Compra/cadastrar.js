@@ -182,7 +182,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     codigo.value = ""
                     cnpj.value = "";
                     valor.value = "";
-                    data.value = "";              
+                    data.value = "";  
+                    window.location.href = '/compras';            
                 }
                 else{
                     alert(resposta2.msg);

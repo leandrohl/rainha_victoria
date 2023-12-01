@@ -41,46 +41,4 @@
             <% } %>
         </tbody>
     </table>
-    <script>
-        document.querySelectorAll('.btnExclusao').forEach(function (button){
-            button.addEventListener('click', function (event) {
-            
-                var produtoId = this.getAttribute('data-id');
-
-            
-                var confirmacao = confirm("Deseja realmente excluir este produto?");
-
-            
-                var form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/produtos/excluir';
-
-            
-                var inputId = document.createElement('input');
-                inputId.type = 'hidden';
-                inputId.name = 'id';
-                inputId.value = produtoId;
-
-                
-                var inputConfirmacao = document.createElement('input');
-                inputConfirmacao.type = 'hidden';
-                inputConfirmacao.name = 'confirmacao';
-            
-                inputConfirmacao.value = confirmacao.toString();
-
-            
-                form.appendChild(inputId);
-                form.appendChild(inputConfirmacao);
-
-            
-                document.body.appendChild(form);
-                form.submit();
-
-                
-                if (!confirmacao) {
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 </div>

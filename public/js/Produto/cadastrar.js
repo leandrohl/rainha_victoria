@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert(resposta2.msg);
                     descricao.value = "";
                     preco.value = "";
-                    quantidade.value = "";              
+                    quantidade.value = "";    
+                    window.location.href = '/produtos';          
                 }
                 else{
                     alert(resposta2.msg);

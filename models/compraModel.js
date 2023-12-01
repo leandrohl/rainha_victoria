@@ -74,11 +74,31 @@ class CompraModel {
         return null;
     }
 
+    async obterComprasPorFornecedor(fornecedorId) {
+        let sql = "select * from tb_compra where Pessoa_cod_pessoa = ?";
+        let valores = [fornecedorId];
+
+        let rows = await conexao.ExecutaComando(sql, valores);
+
+        if(rows.length > 0) {
+            var data = {
+                compraCodigo: rows[0]["comp_Cod"],
+                compraValor: rows[0]["comp_Valor"],
+                compraData: rows[0]["comp_Data"]
+            }
+
+            return data;
+        }
+
+        return null;
+    }
+
     async salvarCompra() {
+        let dataAtual = new Date();
         let sql = `insert into tb_compra
-                    (comp_Cod, Pessoa_cod_pessoa, comp_Valor, comp_Data)
-                    values (?, ?, ?, ?)`;
-        let valores = [this.#compCod, this.#compCodigoPessoa, this.#compValor, this.#compData];
+                    (comp_Cod, Pessoa_cod_pessoa, comp_Valor, comp_Data, comp_Data_criacao)
+                    values (?, ?, ?, ?, ?)`;
+        let valores = [this.#compCod, this.#compCodigoPessoa, this.#compValor, this.#compData, dataAtual];
         await conexao.ExecutaComandoNonQuery(sql, valores);
         return this.#compCod;
     }
@@ -116,7 +136,7 @@ class CompraModel {
         }
 
         let sql = `select * from tb_compra c inner join tb_pessoa p on c.Pessoa_cod_pessoa = p.pes_codigo
-        ${sqlWhere}`;
+        ${sqlWhere} order by c.comp_Data_criacao DESC`;
 
         var rows = await conexao.ExecutaComando(sql);
 

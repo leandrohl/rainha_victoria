@@ -63,6 +63,8 @@ class FornecedorModel {
         this.#fornCep = fornCep;
     }
 
+
+
     constructor(fornId, fornCnpj, fornNome, fornEmail, fornTelefone, fornEndereco,fornCep){
         this.#fornId = fornId;
         this.#fornCnpj = fornCnpj;
@@ -98,10 +100,12 @@ class FornecedorModel {
 
 
     async salvarFornecedor() {
-        let sql = `insert into tb_pessoa (pes_email, pes_nome, pes_telefone, pes_endereco, pes_cep)
-        VALUES (? ,?, ?, ?, ?)`;
+        let dataAtual = new Date();
+
+        let sql = `insert into tb_pessoa (pes_email, pes_nome, pes_telefone, pes_endereco, pes_cep, pes_data_criacao)
+        VALUES (? ,?, ?, ?, ?, ?)`;
                         
-        let valores = [this.#fornEmail, this.#fornNome, this.#fornTelefone ,this.#fornEndereco, this.#fornCep];
+        let valores = [this.#fornEmail, this.#fornNome, this.#fornTelefone ,this.#fornEndereco, this.#fornCep, dataAtual];
 
         let id = await conexao.ExecutaComandoLastInserted(sql, valores);
 
@@ -137,7 +141,7 @@ class FornecedorModel {
     async listarFornecedor() {
         let lista = [];
 
-        let sql = "select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa order by p.pes_codigo"
+        let sql = "select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa order by p.pes_data_criacao DESC"
 
         let rows = await conexao.ExecutaComando(sql)
 

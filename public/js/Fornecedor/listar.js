@@ -17,30 +17,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function excluirFornecedor() {
         let idExclusao = this.dataset.id;
-        if(idExclusao != undefined && idExclusao != ""){
 
-            fetch('/fornecedor/excluir', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({id: idExclusao})
-            })
-            .then(function(r) {
-                return r.json();
-            })
-            .then(function(r) {
-                if(r.ok){
-                    alert(r.msg);
-                    window.location.reload();
-                }
-                else{
-                    alert(r.msg);
-                }
-            })
-        }
-        else{
-            alert("Dados inválidos!")
+        if (confirm("Você deseja realmente excluir esse fornecedor?")) {
+            if(idExclusao != undefined && idExclusao != ""){
+
+                fetch('/fornecedor/excluir', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({id: idExclusao})
+                })
+                .then(function(r) {
+                    return r.json();
+                })
+                .then(function(r) {
+                    if(r.ok){
+                        alert(r.msg);
+                        window.location.reload();
+                    }
+                    else{
+                        alert(r.msg);
+                    }
+                })
+            }
+            else{
+                alert("Dados inválidos!")
+            }
         }
     }
 })

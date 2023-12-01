@@ -1,7 +1,6 @@
 const Database = require('../utils/database')
 const ProdutoModel = require("./produtoModel");
 
-
 const conexao = new Database();
 
 class ItensCompraModel {
@@ -87,6 +86,31 @@ class ItensCompraModel {
 
         return lista;
     }
+
+    async buscarPorProdutoId(produtoId) {
+        let lista = [];
+        let sql = "select * from tb_itens_compra where ic_Produto_Codigo = ?";
+        let valores = [produtoId];
+
+        let rows = await conexao.ExecutaComando(sql, valores);
+
+        for(let i=0; i<rows.length; i++){
+            let row = rows[i];
+
+            var data = {
+                compraCodigo: row["comp_Cod"],
+                produtoCodigo: row["ic_Produto_Codigo"],
+                quantidade: row["ic_Quantidade"],
+                valorUnitario: row["ic_ValorUnit"],
+            }
+
+            lista.push(data);
+        }
+
+        return lista;
+    }
+
+
 
     async gravar() {
         let sql = `insert into tb_itens_compra

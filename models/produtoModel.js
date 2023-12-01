@@ -66,10 +66,11 @@ class ProdutoModel {
     }
 
     async salvarProduto() {
+        let dataAtual = new Date();
         let sql = `insert into tb_produto
-                    (prod_Cod, prod_Desc, prod_Preco, prod_Quant)
-                    values (?, ?, ?, ?)`;
-        let valores = [this.#proCodigo, this.#proDescricao, this.#proPreco, this.#proQuantidade];
+                    (prod_Cod, prod_Desc, prod_Preco, prod_Quant, prod_Data_criacao)
+                    values (?, ?, ?, ?, ?)`;
+        let valores = [this.#proCodigo, this.#proDescricao, this.#proPreco, this.#proQuantidade, dataAtual];
         let resultado = await conexao.ExecutaComandoNonQuery(sql, valores);
         return resultado;
     }
@@ -87,7 +88,7 @@ class ProdutoModel {
     async listarProdutos() {
         let lista = [];
         
-        let sql = "select * from tb_produto"
+        let sql = "select * from tb_produto order by prod_Data_criacao DESC"
 
         let rows = await conexao.ExecutaComando(sql)
 

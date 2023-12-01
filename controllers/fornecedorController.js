@@ -1,3 +1,4 @@
+const CompraModel = require("../models/compraModel");
 const FornecedorModel = require("../models/fornecedorModel");
 
 
@@ -62,11 +63,18 @@ class fornecedorController{
     async excluir(req, res) {
         if(req.body.id != ""){
             let fornecedor = new FornecedorModel();
-            let result = await fornecedor.deletarFornecedor(req.body.id);
-            if(result == true)
-                res.send({ok: true, msg: "Fornecedor excluído!"});
-            else
-                res.send({ok: false, msg: "Erro ao excluir fornecedor!"});
+            let compras = new CompraModel();
+            let listaCompras = await compras.obterComprasPorFornecedor(req.body.id);
+
+            if (listaCompras.length == 0) {
+                let result = await fornecedor.deletarFornecedor(req.body.id);
+                if(result == true)
+                    res.send({ok: true, msg: "Fornecedor excluído!"});
+                else
+                    res.send({ok: false, msg: "Erro ao excluir fornecedor!"});
+            } else {
+                res.send({ ok: false, msg: "Este fornecedor está vinculado a uma compra!" });
+            }
         }
         else{
             res.send({ok: false, msg: "Dados inválidos!"});

@@ -1,5 +1,6 @@
 const ProdutoModel = require("../models/produtoModel");
 const Database = require('../utils/database')
+const ItensCompraModel = require("../models/itensCompraModel");
 
 const conexao = new Database();
 
@@ -28,21 +29,20 @@ class ProdutoController {
 
     async excluir(req, res) {
         if (req.body.id != "") {
-            
-            const confirmacao = req.body.confirmacao === 'true';
-           
-            if (confirmacao == true){
-                let produto = new ProdutoModel();
+            let produto = new ProdutoModel();
+            let itensCompra = new ItensCompraModel();
+            let listaCompras = await itensCompra.buscarPorProdutoId(req.body.id);
+
+            if (listaCompras.length == 0) {
                 let result = await produto.deletarProduto(req.body.id, conexao);
 
                 if (result == true)
                     res.send({ ok: true, msg: "Exclusão efetuada com sucesso!" });  
                 else
-                   res.send({ ok: false, msg: "Erro ao excluir produto!" });
+                    res.send({ ok: false, msg: "Erro ao excluir produto!" });
+            } else {
+                res.send({ ok: false, msg: "Este produto está vinculado a uma compra!" });
             }
-            else
-                res.send({ ok: true, msg: "Exclusão cancelada!" });
-                
         }
         else
             res.send({ ok: false, msg: "Dados inválidos!" });
