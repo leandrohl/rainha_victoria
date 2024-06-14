@@ -1,5 +1,5 @@
 const express = require('express');
-const ContatoController = require('../controllers/contatoController');
+const ContatoController = require('../control/contatoController');
 
 class ContatoRoute {
 

@@ -46,7 +46,10 @@ class ProdutoModel {
         this.#proQuantidade = proQuantidade;
     }
 
-    async obterProdutoPorId(id) {
+    async obterProdutoPorId(id, bd) {
+        if(bd != null)
+            conexao = bd;
+        
         let sql = "select * from tb_produto where prod_Cod = ?";
         let valores = [id];
 
@@ -114,7 +117,10 @@ class ProdutoModel {
         return result;
     }
 
-    async atualizarQuantidadeEstoque(novoEstoque, proCodigo) {
+    async atualizarQuantidadeEstoque(novoEstoque, proCodigo, bd) {
+        if(bd != null)
+            conexao = bd;
+        
         let sql = `UPDATE tb_produto SET prod_Quant = ${novoEstoque} WHERE prod_Cod = ${proCodigo}`;
         await conexao.ExecutaComando(sql);
       }

@@ -2,6 +2,7 @@ const CompraModel = require("../models/compraModel");
 const ProdutoModel = require("../models/produtoModel");
 const FornecedorModel = require("../models/fornecedorModel");
 const ItensCompraModel = require("../models/itensCompraModel");
+const Database = require("../utils/database2");
 
 class CompraController {
     async listarView(req, res) {
@@ -69,39 +70,55 @@ class CompraController {
     }
 
     async gravarCompra(req, res) {
-        const listaProdutos = req.body.listaProdutos;
-        if(req.body.codigo && req.body.cnpj != '' && req.body.valor != '' && req.body.data != '' && listaProdutos != null & listaProdutos.length > 0){
-            let fornecedor = new FornecedorModel();
-            fornecedor = await fornecedor.obterFornecedorPorCNPJ(req.body.cnpj);
-            
-            if (fornecedor != null) {
-                let compra = new CompraModel(req.body.codigo, fornecedor.fornId, req.body.valor, req.body.data);
+        let banco = new Database();
+        try {
+            const listaProdutos = req.body.listaProdutos;
+            if(req.body.codigo && req.body.cnpj != '' && req.body.valor != '' && req.body.data != '' && listaProdutos != null & listaProdutos.length > 0){
+                await banco.AbreTransacao();
+                let fornecedor = new FornecedorModel();
+
+                if (fornecedor.validarCNPJ(req.body.cnpj) == true) {
+                    fornecedor = await fornecedor.obterFornecedorPorCNPJ(req.body.cnpj, banco);
                 
-                const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo);
-
-                if (compraExistente != null) {
-                    res.send({ ok: true, msg: "Já existe uma compra com esse código!"});
-                    return;
+                    if (fornecedor != null) {
+                        let compra = new CompraModel(req.body.codigo, fornecedor.fornId, req.body.valor, req.body.data);
+                        
+                        const compraExistente = await compra.obterCompraPorCodigo(req.body.codigo, banco);
+        
+                        if (compraExistente != null) {
+                            res.send({ ok: true, msg: "Já existe uma compra com esse código!"});
+                            return;
+                        }
+        
+                        const codigoCompra = await compra.salvarCompra(banco);
+        
+                        for (let i = 0; i < listaProdutos.length; i++) {
+                            let produtoQuant = listaProdutos[i];
+                            let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
+                            let produto = new ProdutoModel();
+                            let estoque = await produto.obterProdutoPorId(produtoQuant.id, banco);
+        
+                            await compraItem.gravar(banco);
+                            await produto.atualizarQuantidadeEstoque(parseInt(estoque.proQuantidade) + parseInt(produtoQuant.quantidade), estoque.proCodigo, banco);
+                        }
+        
+                        await banco.Commit();
+                        res.send({ ok: true, msg: "Compra gravada com sucesso"})
+                    } else {
+                        res.send({ok: false, msg: "Não existe um fornecedor cadastrado com esse CNPJ!"});
+                    }
                 }
-
-                const codigoCompra = await compra.salvarCompra();
-
-                for (let i = 0; i < listaProdutos.length; i++) {
-                    let produtoQuant = listaProdutos[i];
-                    let compraItem = new ItensCompraModel(codigoCompra, listaProdutos[i].id, listaProdutos[i].quantidade, listaProdutos[i].preco);
-                    let produto = new ProdutoModel();
-                    let estoque = await produto.obterProdutoPorId(produtoQuant.id);
-
-                    await compraItem.gravar();
-                    await produto.atualizarQuantidadeEstoque(parseInt(estoque.proQuantidade) + parseInt(produtoQuant.quantidade), estoque.proCodigo);
+                else {
+                    res.send({ok: false, msg: "CNPJ Inválido"})
                 }
-                res.send({ ok: true, msg: "Compra gravada com sucesso"})
-            } else {
-                res.send({ok: false, msg: "Não existe um fornecedor cadastrado com esse CNPJ!"});
             }
+            else
+                res.send({ok: false, msg: "Dados inválidos!"})
+        } catch (e) {
+            await banco.Rollback();
+            res.send({ok: false, msg: "Erro interno de servidor!"})
         }
-        else
-            res.send({ok: false, msg: "Dados inválidos!"})
+       
     }
 
     async alterar(req, res) {

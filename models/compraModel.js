@@ -54,7 +54,10 @@ class CompraModel {
         this.#fornNome = fornNome;
     }
 
-    async obterCompraPorCodigo(id) {
+    async obterCompraPorCodigo(id, bd) {
+        if(bd != null)
+            conexao = bd;
+
         let sql = "select * from tb_compra c inner join tb_pessoa p on c.Pessoa_cod_pessoa = p.pes_codigo where comp_Cod = ?";
         let valores = [id];
 
@@ -94,6 +97,9 @@ class CompraModel {
     }
 
     async salvarCompra() {
+        if(bd != null)
+            conexao = bd;
+        
         let dataAtual = new Date();
         let sql = `insert into tb_compra
                     (comp_Cod, Pessoa_cod_pessoa, comp_Valor, comp_Data, comp_Data_criacao)

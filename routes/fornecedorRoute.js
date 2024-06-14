@@ -1,5 +1,5 @@
 const express = require('express');
-const fornecedorController = require('../controllers/fornecedorController');
+const fornecedorController = require('../control/fornecedorController');
 class fornecedorRoute{
 
     #router;

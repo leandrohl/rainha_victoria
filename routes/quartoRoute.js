@@ -1,5 +1,5 @@
 const express = require('express');
-const QuartoController = require('../controllers/QuartoController');
+const QuartoController = require('../control/QuartoController');
 
 class QuartoRoute {
 

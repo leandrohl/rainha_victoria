@@ -112,7 +112,10 @@ class ItensCompraModel {
 
 
 
-    async gravar() {
+    async gravar(bd) {
+        if(bd != null)
+            conexao = bd;
+
         let sql = `insert into tb_itens_compra
                     (ic_Compra_Codcom, ic_Produto_Codigo, ic_Quantidade, ic_ValorUnit)
                     values (?, ?, ?, ?)`;

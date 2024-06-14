@@ -1,5 +1,5 @@
 const express = require('express');
-const CompraController = require('../controllers/compraController');
+const CompraController = require('../control/compraController');
 
 class CompraRoute {
 

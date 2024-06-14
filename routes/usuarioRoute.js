@@ -1,5 +1,5 @@
 const express = require('express');
-const UsuarioController = require('../controllers/usuarioController');
+const UsuarioController = require('../control/usuarioController');
 const Autenticacao = require('../middlewares/autenticacao');
 
 class UsuarioRoute {

@@ -173,7 +173,10 @@ class FornecedorModel {
     }
 
 
-    async obterFornecedorPorCNPJ(cnpj) {
+    async obterFornecedorPorCNPJ(cnpj, bd) {
+        if(bd != null)
+            conexao = bd;
+
         let sql = `select * from tb_pessoa p inner join tb_juridica j on p.pes_codigo = j.cod_pessoa where j.jur_cnpj = ${cnpj}`
    
         let rows = await conexao.ExecutaComando(sql)
@@ -192,6 +195,36 @@ class FornecedorModel {
         }
 
         return null;
+    }
+
+    validarCNPJ(cnpj) {
+        cnpj = cnpj.replace(/[^\d]/g, '');
+    
+        if (cnpj.length !== 14) {
+            return false;
+        }
+    
+        const cnpjSemDigitos = cnpj.substr(0, 12);
+        const digito1 = calcularDigitoVerificador(cnpjSemDigitos, 5);
+        const digito2 = calcularDigitoVerificador(cnpjSemDigitos + digito1, 6);
+    
+        if (cnpj.substr(-2) === `${digito1}${digito2}`) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    calcularDigitoVerificador(cnpjSemDigitos, peso) {
+        let soma = 0;
+        for (let i = 0; i < cnpjSemDigitos.length; i++) {
+            soma += parseInt(cnpjSemDigitos[i]) * peso--;
+            if (peso < 2) {
+                peso = 9;
+            }
+        }
+        const resto = soma % 11;
+        return resto < 2 ? 0 : 11 - resto;
     }
 
     toJSON() {
